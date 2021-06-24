@@ -1,10 +1,8 @@
 import * as express from 'express';
+import authorsRouter from './authors';
 
 const router = express.Router();
 
-
-router.get('/api/hello', (req, res, next) => {
-    res.json('World');
-});
+router.use('/authors', authorsRouter);
 
 export default router;
