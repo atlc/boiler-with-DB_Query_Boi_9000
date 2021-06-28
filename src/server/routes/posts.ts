@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import authors from '../db/queries/authors';
+import posts from '../db/queries/posts';
 
 const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        const pizza_party = await authors.all();
+        const pizza_party = await posts.all();
         res.json(pizza_party);
     } catch (error) {
         console.log(error.sqlMessage);
@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const id = Number(req.params.id);
-        const [singleAuthor] = await authors.single_author(id);
-        res.json(singleAuthor);
+        const [singlePost] = await posts.single_post(id);
+        res.json(singlePost);
     } catch (error) {
         console.log(error.sqlMessage);
         res.status(500).json({ error });
@@ -27,8 +27,8 @@ router.get('/:id', async (req, res) => {
 router.post('/search', async (req, res) => {
     try {
         const { value } = req.body;
-        const foundAuthors = await authors.search(value);
-        res.json(foundAuthors);
+        const foundposts = await posts.search(value);
+        res.json(foundposts);
     } catch (error) {
         console.log(error.sqlMessage);
         res.status(500).json({ error });
@@ -37,10 +37,10 @@ router.post('/search', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const newUser = req.body;
-        const db_response = await authors.create(newUser);
+        const newpost = req.body;
+        const db_response = await posts.create(newpost);
         res.json({
-            message: "The new user was added successfully!",
+            message: "The new post was added successfully!",
             id_lmao: db_response.insertId
         });
     } catch (error) {
@@ -51,12 +51,12 @@ router.post('/', async (req, res) => {
 
 router.put('/', async (req, res) => {
     try {
-        const { email, id } = req.body;
-        const db_response = await authors.update(email, id);
+        const { content, id } = req.body;
+        const db_response = await posts.update(content, id);
         if (db_response.affectedRows === 1) {
-            res.json({ message: "The user was updated successfully!" });
+            res.json({ message: "The post was updated successfully!" });
         } else {
-            res.status(404).json({ message: `The user with id #${id} was not found`})
+            res.status(404).json({ message: `The post with id #${id} was not found` })
         }
     } catch (error) {
         console.log(error.sqlMessage);
@@ -67,8 +67,8 @@ router.put('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const id = Number(req.params.id);
-        await authors.destroy(id);
-        res.json({ message: "The user was deleted successfully" });
+        await posts.destroy(id);
+        res.json({ message: "The post was deleted successfully" });
     } catch (error) {
         console.log(error.sqlMessage);
         res.status(500).json({ error });
