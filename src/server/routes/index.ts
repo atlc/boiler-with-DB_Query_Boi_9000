@@ -1,10 +1,11 @@
-import * as express from 'express';
-import authorsRouter from './authors';
-import postsRouter from './posts';
+import { Router } from 'express';
+import apiRouter from './api';
+import authRouter from './auth';
 
-const router = express.Router();
+const router = Router();
 
-router.use('/authors', authorsRouter);
-router.use('/posts', postsRouter);
+router.use('/api', apiRouter);
+router.use('/auth', authRouter);
+
 
 export default router;
