@@ -16,6 +16,12 @@ export interface posts {
     date: string;
 }
 
+export interface Users {
+    id: string;
+    email: string;
+    password: string;
+}
+
 interface MySQL_Success {
     fieldCount: number;
     affectedRows: number;
