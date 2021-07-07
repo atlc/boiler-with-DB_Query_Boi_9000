@@ -1,30 +1,30 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Login from './views/Login';
 
-/* HOOK REACT EXAMPLE */
-const App = (props: AppProps) => {
-	const [greeting, setGreeting] = useState<string>('');
-
-	useEffect(() => {
-		async function getGreeting() {
-			try {
-				const res = await fetch('/api/hello');
-				const greeting = await res.json();
-				setGreeting(greeting);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		getGreeting();
-	}, []);
+const App = () => {
 
 	return (
-		<main className="container my-5">
-			<h1 className="text-primary text-center">Hello {greeting}!</h1>
-		</main>
+		<BrowserRouter>
+			<Navbar />
+			<Switch>
+				<Route exact path='/'>
+					<h1>Home!</h1>
+				</Route>
+				<Route exact path='/login'>
+					<Login />
+				</Route>
+				<Route exact path='/authors'>
+					<h1>Authors</h1>
+				</Route>
+				<Route exact path='/posts'>
+					<h1>Posts</h1>
+				</Route>
+			</Switch>
+		</BrowserRouter>
 	);
 };
 
-interface AppProps {}
 
 export default App;

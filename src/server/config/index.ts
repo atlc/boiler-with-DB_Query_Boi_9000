@@ -8,3 +8,8 @@ export const sqlConfig = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_SCHEMA
 }
+
+export const jwtConfig = {
+    secret: process.env.JWT_SUPER_MEGA_SECRET,
+    expiration: process.env.JWT_EXPIRATION
+}

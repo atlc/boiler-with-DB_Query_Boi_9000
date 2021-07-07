@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import authors from '../../db/queries/authors';
+import { isAdmin, makeSureTokenIsValid } from '../../utils/tokenCheck';
 
 const router = Router();
 
@@ -49,10 +50,11 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-        const { email, id } = req.body;
-        const db_response = await authors.update(email, id);
+        const { id } = req.params;
+        const { email } = req.body;
+        const db_response = await authors.update(email, Number(id));
         if (db_response.affectedRows === 1) {
             res.json({ message: "The user was updated successfully!" });
         } else {
@@ -64,7 +66,7 @@ router.put('/', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', isAdmin, async (req, res) => {
     try {
         const id = Number(req.params.id);
         await authors.destroy(id);

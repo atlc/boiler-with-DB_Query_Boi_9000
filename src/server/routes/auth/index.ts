@@ -3,6 +3,8 @@ import users from "../../db/queries/users";
 import { validate } from '@atlc/hibp';
 import { v4 as uuid } from "uuid";
 import { hash, genSalt, compare } from "bcrypt";
+import { sign, verify } from "jsonwebtoken";
+import { jwtConfig } from '../../config';
 
 const router = Router();
 
@@ -53,7 +55,8 @@ router.post("/login", async (req, res) => {
     const isCorrectPassword = await compare(password, user.password);
     
     if (isCorrectPassword) {
-      res.status(200).json({ message: "Successfully logged in!" })
+      const token = sign({ id: user.id, role: 'user' }, jwtConfig.secret, { expiresIn: jwtConfig.expiration });
+      res.status(200).json({ message: "Successfully logged in!", token });
     } else {
       res.status(401).json({ message: "That email/password combination is incorrect." });
     }
