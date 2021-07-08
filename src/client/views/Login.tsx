@@ -1,23 +1,21 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { POST } from '../services/fetchExtender';
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const history = useHistory();
+
   const handleLoginButton = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    fetch('/auth/login', {
-        method: "POST",
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-    })
-    .then(doodoo => doodoo.json())
-    .then(serverResponseLmao => {
-        localStorage.setItem('token', serverResponseLmao.token)
-    })
-    .catch(e => console.log(e));
+
+    POST('/auth/login', { email, password })
+      .then(serverRes => {
+        if (serverRes.token) localStorage.setItem("token", serverRes.token);
+        if (confirm("Logged in. Go home?")) history.push("/");
+      })
   };
 
   return (

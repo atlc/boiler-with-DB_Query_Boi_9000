@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Authors from './views/Authors';
 import Login from './views/Login';
 
 const App = () => {
@@ -16,7 +17,7 @@ const App = () => {
 					<Login />
 				</Route>
 				<Route exact path='/authors'>
-					<h1>Authors</h1>
+					<Authors />
 				</Route>
 				<Route exact path='/posts'>
 					<h1>Posts</h1>
