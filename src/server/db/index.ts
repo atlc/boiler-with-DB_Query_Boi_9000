@@ -4,7 +4,7 @@ import { MySQL_Res } from '../../types';
 
 const pool = mysql.createPool({
     ...sqlConfig,
-    timeout: 600000
+    timeout: 10000
 });
 
 export const DB_Query_Boi_9000 = <T = MySQL_Res>(query: string, values?: any[]) => {

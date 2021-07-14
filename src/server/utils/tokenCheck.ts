@@ -14,6 +14,8 @@ export const makeSureTokenIsValid: RequestHandler = ((req, res, next) => {
     }
 });
 
+
+
 export const isAdmin: RequestHandler = ((req, res, next) => {
   const headerz = req.headers;
   const jwt = headerz.authorization.split(' ')[1];

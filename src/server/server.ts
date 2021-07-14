@@ -1,9 +1,12 @@
 import * as express from 'express';
 import * as path from 'path';
+import * as passport from 'passport';
 import router from './routes';
+import './middlewares/passport';
 
 const app = express();
 
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.static('public'));
 app.use(router);

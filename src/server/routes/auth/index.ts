@@ -1,9 +1,10 @@
 import { Router } from "express";
-import users from "../../db/queries/users";
 import { validate } from '@atlc/hibp';
 import { v4 as uuid } from "uuid";
 import { hash, genSalt, compare } from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
+import { authenticate } from 'passport';
+import users from "../../db/queries/users";
 import { jwtConfig } from '../../config';
 
 const router = Router();
@@ -39,31 +40,10 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+router.post("/login", authenticate('local'), async (req, res) => {
 
-  if (!email || !password) {
-    return res.status(400).json({ message: "You suck" });
-  }
-
-  try {
-    const [user] = await users.getByEmail(email);
-    if (!user) {
-      return res.status(400).json({ message: "Error!" });
-    }
-
-    const isCorrectPassword = await compare(password, user.password);
-    
-    if (isCorrectPassword) {
-      const token = sign({ id: user.id, role: 'user' }, jwtConfig.secret, { expiresIn: jwtConfig.expiration });
-      res.status(200).json({ message: "Successfully logged in!", token });
-    } else {
-      res.status(401).json({ message: "That email/password combination is incorrect." });
-    }
-
-  } catch (error) {
-    res.status(500).json({ message: "Error", error });
-  }
+  const token = sign({ id: req.user.id, role: 'user' }, jwtConfig.secret, { expiresIn: jwtConfig.expiration });
+  res.json({ message: "Success!", token });
 });
 
 export default router;
