@@ -8,20 +8,9 @@ export interface RequestWithUser extends Request {
 }
 
 
-
-
-export interface authors {
+export interface Posts {
     id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    birthdate: string;
-    added: string;
-}
-
-export interface posts {
-    id: number;
-    author_id: authors['id'];
+    user_id: Users['id'];
     title: string;
     description: string;
     content: string;

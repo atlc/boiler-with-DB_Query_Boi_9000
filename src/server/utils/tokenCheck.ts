@@ -22,3 +22,14 @@ export const isAdmin: RequestHandler = (req: RequestWithUser, res, next) => {
   })(req, res, next);
 }
 
+export const hasValidToken: RequestHandler = (req: RequestWithUser, res, next) => {
+  authenticate('jwt', (err, user, info) => {
+    if (err) return res.status(401).json({ message: "An unknown error occurred.", error: err});
+    if (info) return res.status(401).json({ message: "An unknown error occurred.", error: info.message });
+
+    if (!user) return res.status(500).json({ message: "This shouldn't happen lmao"});
+    
+    req.user = user;
+    next();
+  })(req, res, next);
+}
