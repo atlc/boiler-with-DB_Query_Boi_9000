@@ -6,7 +6,7 @@ const search = (value: string) => DB_Query_Boi_9000<posts[]>(`SELECT * FROM post
 const single_post = (id: number) => DB_Query_Boi_9000<posts[]>('SELECT * FROM posts WHERE id=?', [id]);
 const create = (post: posts) => DB_Query_Boi_9000('INSERT INTO posts SET ?', [post]);
 const update = (content: posts['content'], id: posts['id']) => DB_Query_Boi_9000('UPDATE posts SET content=? WHERE id=?', [content, id]);
-const destroy = (id: posts['id']) => DB_Query_Boi_9000('DELETE FROM posts WHERE id=?', [id]);
+const destroy = (id: posts['id'], author_id: string) => DB_Query_Boi_9000('DELETE FROM posts WHERE id=? AND author_id=?', [id, author_id]);
 
 
 export default {

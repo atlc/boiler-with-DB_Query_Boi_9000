@@ -1,7 +1,9 @@
 import { compare } from 'bcrypt';
 import * as passport from 'passport';
 import * as PPLocal from 'passport-local';
+import * as PPJWT from 'passport-jwt';
 import users from '../db/queries/users';
+import { jwtConfig } from '../config';
 
 
 
@@ -26,6 +28,17 @@ passport.use(new PPLocal.Strategy({
 
         delete user.password;
         done(null, user);
+    } catch (error) {
+        done(error);
+    }
+}));
+
+passport.use(new PPJWT.Strategy({
+    jwtFromRequest: PPJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: jwtConfig.secret
+}, async (payload, done) => {
+    try {
+        done(null, payload);
     } catch (error) {
         done(error);
     }

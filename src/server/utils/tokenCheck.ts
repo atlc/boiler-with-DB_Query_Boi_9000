@@ -1,34 +1,24 @@
 import { RequestHandler } from "express";
-import { verify } from "jsonwebtoken";
-import { jwtConfig } from "../config";
+import { authenticate } from 'passport';
+import { RequestWithUser } from "../../types";
 
-export const makeSureTokenIsValid: RequestHandler = ((req, res, next) => {
-    const headerz = req.headers;
-    const jwt = headerz.authorization.split(' ')[1];
-  
-    try {
-      const token = verify(jwt, jwtConfig.secret);
-      next();
-    } catch (error) {
-      res.status(401).json(error);
-    }
-});
+export const isAdmin: RequestHandler = (req: RequestWithUser, res, next) => {
+  authenticate('jwt', (err, user, info) => {
+    if (err) return res.status(401).json({ message: "An unknown error occurred.", error: err});
+    if (info) return res.status(401).json({ message: "An unknown error occurred.", error: info.message });
 
-
-
-export const isAdmin: RequestHandler = ((req, res, next) => {
-  const headerz = req.headers;
-  const jwt = headerz.authorization.split(' ')[1];
-
-  try {
-    const token = verify(jwt, jwtConfig.secret);
-    if (token.role === 'admin') {
-      next();
+    if (!user) return res.status(500).json({ message: "This shouldn't happen lmao"});
+    req.user = user;
+    
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ 
+        message: "You do not have sufficient permissions to access this resource",
+        your_role: req.user.role,
+        required_role: 'admin'
+      });
     } else {
-      res.status(401).json("YOU'RE NOT AN ADMIN");
+      next();
     }
-  } catch (error) {
-    res.status(401).json(error);
-  }
-});
+  })(req, res, next);
+}
 

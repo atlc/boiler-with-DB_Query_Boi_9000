@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import authors from '../../db/queries/authors';
-import { isAdmin, makeSureTokenIsValid } from '../../utils/tokenCheck';
+import { isAdmin } from '../../utils/tokenCheck';
 
 const router = Router();
 

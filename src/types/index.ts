@@ -1,3 +1,15 @@
+import { Request } from 'express';
+
+export interface RequestWithUser extends Request {
+    user?: {
+        id?: string;
+        role?: string;
+    }
+}
+
+
+
+
 export interface authors {
     id: number;
     first_name: string;

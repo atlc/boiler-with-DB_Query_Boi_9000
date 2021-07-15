@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { RequestWithUser } from '../../../types';
 import posts from '../../db/queries/posts';
 
 const router = Router();
@@ -65,10 +66,11 @@ router.put('/', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req: RequestWithUser, res) => {
     try {
+        const userId = req.user.id;
         const id = Number(req.params.id);
-        await posts.destroy(id);
+        await posts.destroy(id, userId);
         res.json({ message: "The post was deleted successfully" });
     } catch (error) {
         console.log(error.sqlMessage);
