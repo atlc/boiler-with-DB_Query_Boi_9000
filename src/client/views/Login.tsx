@@ -13,9 +13,14 @@ const Login = () => {
 
     POST('/auth/login', { email, password })
       .then(serverRes => {
-        if (serverRes.token) localStorage.setItem("token", serverRes.token);
-        if (confirm("Logged in. Go home?")) history.push("/");
+        if (serverRes.token) {
+          localStorage.setItem("token", serverRes.token);
+          history.push("/");
+        } else {
+          alert(`No token was received from the backend, please try logging in again.`);
+        }
       })
+      .catch(e => alert(e));
   };
 
   return (

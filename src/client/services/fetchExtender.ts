@@ -1,6 +1,6 @@
 const fetchr = (path: string, method: string = "GET", body?: BodyInit | undefined) => {
     const token = localStorage.getItem("token");
-    const headers = {};
+    const headers: HeaderParams = {};
 
     if (token) headers['Authorization'] = `Bearer ${token}`;
     headers['Content-type'] = 'application/json';
@@ -25,8 +25,10 @@ const fetchr = (path: string, method: string = "GET", body?: BodyInit | undefine
 }
 
 export const GET = (path: string) => fetchr(path);
-export const POST = (path: string, data) => fetchr(path, "POST", data);
-export const PUT = (path: string, data) => fetchr(path, "PUT", data);
-export const DELETE = (path: string, data) => fetchr(path, "DELETE", data);
+export const POST = (path: string, data: BodyInit | any) => fetchr(path, "POST", data);
+export const PUT = (path: string, data: BodyInit | any) => fetchr(path, "PUT", data);
+export const DELETE = (path: string, data: BodyInit | any) => fetchr(path, "DELETE", data);
 
- 
+interface HeaderParams {
+    [key: string]: string;
+}

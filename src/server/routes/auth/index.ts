@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { validate } from '@atlc/hibp';
 import { v4 as uuid } from "uuid";
-import { hash, genSalt, compare } from "bcrypt";
-import { sign, verify } from "jsonwebtoken";
+import { hash, genSalt } from "bcrypt";
+import { sign } from "jsonwebtoken";
 import { authenticate } from 'passport';
 import users from "../../db/queries/users";
 import { jwtConfig } from '../../config';
+import { RequestWithUser } from "../../../types";
 
 const router = Router();
 
@@ -40,7 +41,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", authenticate('local'), async (req, res) => {
+router.post("/login", authenticate('local'), async (req: RequestWithUser, res) => {
 
   const token = sign({ id: req.user.id, role: 'user' }, jwtConfig.secret, { expiresIn: jwtConfig.expiration });
   res.json({ message: "Success!", token });

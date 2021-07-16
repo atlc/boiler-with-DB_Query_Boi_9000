@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Authors from './views/Authors';
+import PrivateRoute from './components/PrivateRoute';
 import Login from './views/Login';
+import Profile from './views/Profile';
 
 const App = () => {
 
@@ -16,11 +17,11 @@ const App = () => {
 				<Route exact path='/login'>
 					<Login />
 				</Route>
-				<Route exact path='/authors'>
-					<Authors />
-				</Route>
-				<Route exact path='/posts'>
-					<h1>Posts</h1>
+				<PrivateRoute exact path='/profile'>
+					<Profile />
+				</PrivateRoute>
+				<Route path='*'>
+					<h1 className="display-1">404, y'all!</h1>
 				</Route>
 			</Switch>
 		</BrowserRouter>

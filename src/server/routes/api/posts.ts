@@ -4,9 +4,10 @@ import posts from '../../db/queries/posts';
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', async (req: RequestWithUser, res) => {
     try {
-        const pizza_party = await posts.all();
+        const user_id = req.user.id;
+        const pizza_party = await posts.all(user_id);
         res.json(pizza_party);
     } catch (error) {
         console.log(error.sqlMessage);
