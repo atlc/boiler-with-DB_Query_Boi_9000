@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
@@ -7,15 +8,18 @@ import Profile from './views/Profile';
 
 const App = () => {
 
+	const token = !!localStorage.getItem('token');
+	const [isLoggedIn, setIsLoggedIn] = useState(token);
+
 	return (
 		<BrowserRouter>
-			<Navbar />
+			<Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
 			<Switch>
 				<Route exact path='/'>
 					<h1>Home!</h1>
 				</Route>
 				<Route exact path='/login'>
-					<Login />
+					<Login setIsLoggedIn={setIsLoggedIn} />
 				</Route>
 				<PrivateRoute exact path='/profile'>
 					<Profile />

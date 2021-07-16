@@ -1,14 +1,30 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = (props: NavbarProps) => {
+    const history = useHistory();
+
+    const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+        props.setIsLoggedIn(false);
+        localStorage.removeItem('token');
+        history.push('/');
+    }
+
     return (
-        <div>
-            <Link to='/' className='btn btn-success m-2'>Home</Link>
-            <Link to='/profile' className='btn btn-success m-2'>My Profile</Link>
-            <Link to='/login' className='btn btn-success m-2'>Login</Link>
+        <div className="bg-info mb-3 shadow">
+            <NavLink exact activeClassName="border border-dark" to='/' className='btn btn-outline-info text-dark m-2'>Home</NavLink>
+            {props.isLoggedIn && <NavLink exact activeClassName="border border-dark" to='/profile' className='btn btn-outline-info text-dark m-2'>My Profile</NavLink>}
+            {props.isLoggedIn ? 
+                <button onClick={handleLogout} className='btn btn-outline-info text-dark m-2'>Logout</button>
+                : <NavLink exact activeClassName="border border-dark" to='/login' className='btn btn-outline-info text-dark m-2'>Login</NavLink>
+            }
         </div>
     );
 }
 
-export default Navbar
+interface NavbarProps {
+    isLoggedIn: boolean;
+    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default Navbar;
